@@ -28,7 +28,7 @@ fun maidCommands() = commands("Maids") {
                 image = redirectLocation
 
                 footer {
-                    text = "Current maid count: 1576 | https://maid.ws/"
+                    text = "Current maid count: 2455 | https://maid.ws/"
                 }
             }
         }
