@@ -17,10 +17,34 @@ dependencies {
     testImplementation(kotlin("test"))
 }
 
-tasks.test {
-    useJUnitPlatform()
+val fatJar = task("fatJar", type = Jar::class) {
+    archiveBaseName.set("${project.name}-fat")
+    group = "build"
+
+    manifest {
+        attributes["Implementation-Title"] = "Maid Bot"
+        attributes["Implementation-Version"] = archiveVersion
+        attributes["Main-Class"] = "com.sarahisweird.maidbot.MaidBotKt"
+    }
+
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    from(configurations.runtimeClasspath.get()
+        .map { if (it.isDirectory) it else zipTree(it) })
+
+    with(tasks.jar.get() as CopySpec)
 }
 
-tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "1.8"
+tasks {
+    build {
+        dependsOn(fatJar)
+    }
+
+    test {
+        useJUnitPlatform()
+    }
+
+    withType<KotlinCompile> {
+        kotlinOptions.jvmTarget = "1.8"
+    }
 }
