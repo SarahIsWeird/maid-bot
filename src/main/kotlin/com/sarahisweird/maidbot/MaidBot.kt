@@ -9,7 +9,6 @@ fun main() {
 
     bot(token) {
         configure {
-
             dualRegistry = false
         }
     }

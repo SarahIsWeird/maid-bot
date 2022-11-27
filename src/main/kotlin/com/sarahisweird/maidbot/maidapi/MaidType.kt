@@ -12,7 +12,9 @@ import kotlinx.serialization.encoding.Encoder
 enum class MaidType(val apiName: String, val displayName: String) {
     ALL("all", "total"),
     SAFE_FOR_WORK("sfw", "SFW"),
-    LINGERIE("lingerie", "lingerie");
+    LINGERIE("lingerie", "lingerie"),
+    SWIMSUIT("swimsuit", "swimsuit"),
+    NOT_SAFE_FOR_WORK("nsfw", "NSFW");
 
     companion object {
         fun getMaidTypeFromApiName(apiName: String) =
@@ -20,6 +22,7 @@ enum class MaidType(val apiName: String, val displayName: String) {
                 "all" -> ALL
                 "sfw" -> SAFE_FOR_WORK
                 "lingerie" -> LINGERIE
+                "swimsuit" -> SWIMSUIT
                 else -> throw IllegalArgumentException("Invalid maid type")
             }
     }

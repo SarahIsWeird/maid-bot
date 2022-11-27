@@ -4,6 +4,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class MaidRequest(
-    val type: MaidType,
+    val category: MaidType,
     val amount: Int,
 )

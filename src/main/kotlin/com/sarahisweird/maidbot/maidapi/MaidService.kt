@@ -44,4 +44,18 @@ object MaidService {
 
         return maidResponse
     }
+
+    suspend fun getMaidCount(): MaidCount? {
+        val response: HttpResponse = client.get("$API_URL/stats")
+
+        if (response.status != HttpStatusCode.OK) {
+            return null
+        }
+
+        return try {
+            response.body()
+        } catch (e: Exception) {
+            null
+        }
+    }
 }

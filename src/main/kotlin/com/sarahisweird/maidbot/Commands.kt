@@ -1,5 +1,6 @@
 package com.sarahisweird.maidbot
 
+import com.sarahisweird.maidbot.maidapi.MaidCount
 import com.sarahisweird.maidbot.maidapi.MaidResponse
 import com.sarahisweird.maidbot.maidapi.MaidService
 import com.sarahisweird.maidbot.maidapi.MaidType
@@ -11,48 +12,59 @@ import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
+import me.jakejmattson.discordkt.NoArgs
+import me.jakejmattson.discordkt.commands.GuildSlashCommandEvent
 import me.jakejmattson.discordkt.commands.commands
 
 @Suppress("unused")
 fun maidCommands() = commands("Maids") {
     slash("maid", "Get a maid!") {
         execute {
-            val maidResponse = MaidService.getMaidImage(MaidType.SAFE_FOR_WORK)
-
-            if (maidResponse == null) {
-                respond("Sorry, something went wrong.")
-                return@execute
-            }
-
-            respondPublic {
-                makeMaidResponse(MaidType.SAFE_FOR_WORK, maidResponse)
-            }
+            sendMaid(MaidType.SAFE_FOR_WORK)
         }
     }
 
     slash("lingerie", "Get a maid in lingerie!") {
         execute {
-            val maidResponse = MaidService.getMaidImage(MaidType.LINGERIE)
+            sendMaid(MaidType.LINGERIE)
+        }
+    }
 
-            if (maidResponse == null) {
-                respond("Sorry, something went wrong.")
-                return@execute
-            }
+    slash("swimsuit", "Get a maid in a swimsuit!") {
+        execute {
+            sendMaid(MaidType.SWIMSUIT)
+        }
+    }
 
-            respondPublic {
-                makeMaidResponse(MaidType.LINGERIE, maidResponse)
-            }
+    slash("nsfw", "Get a NSFW maid!") {
+        execute {
+            sendMaid(MaidType.NOT_SAFE_FOR_WORK)
         }
     }
 }
 
-private fun EmbedBuilder.makeMaidResponse(maidType: MaidType, maidResponse: MaidResponse) {
+private suspend fun GuildSlashCommandEvent<NoArgs>.sendMaid(maidType: MaidType) {
+    val maidResponse = MaidService.getMaidImage(maidType)
+    val maidCount = MaidService.getMaidCount()
+
+    if (maidResponse == null || maidCount == null) {
+        respond("Sorry, something went wrong.")
+        return
+    }
+
+    respondPublic {
+        makeMaidResponse(maidType, maidResponse, maidCount)
+    }
+}
+
+private fun EmbedBuilder.makeMaidResponse(maidType: MaidType, maidResponse: MaidResponse, maidCount: MaidCount) {
     title = "Maid Bot"
     color = Color(0) // black
 
     image = maidResponse.files.first()
 
     footer {
-        text = "Current ${maidType.displayName} maid count: ${maidResponse.availableFiles} | https://maid.ws/"
+        text = "${maidType.displayName} maids: ${maidResponse.availableFiles}" +
+                " | Total maids: ${maidCount.all} | https://maid.ws/"
     }
 }
