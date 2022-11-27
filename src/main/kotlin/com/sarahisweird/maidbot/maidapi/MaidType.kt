@@ -14,7 +14,8 @@ enum class MaidType(val apiName: String, val displayName: String) {
     SAFE_FOR_WORK("sfw", "SFW"),
     LINGERIE("lingerie", "lingerie"),
     SWIMSUIT("swimsuit", "swimsuit"),
-    NOT_SAFE_FOR_WORK("nsfw", "NSFW");
+    NOT_SAFE_FOR_WORK("nsfw", "NSFW"),
+    BONDAGE("bondage", "bondage");
 
     companion object {
         fun getMaidTypeFromApiName(apiName: String) =
@@ -23,6 +24,7 @@ enum class MaidType(val apiName: String, val displayName: String) {
                 "sfw" -> SAFE_FOR_WORK
                 "lingerie" -> LINGERIE
                 "swimsuit" -> SWIMSUIT
+                "bondage" -> BONDAGE
                 else -> throw IllegalArgumentException("Invalid maid type")
             }
     }

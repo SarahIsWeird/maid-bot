@@ -41,6 +41,12 @@ fun maidCommands() = commands("Maids") {
             sendMaid(MaidType.NOT_SAFE_FOR_WORK)
         }
     }
+
+    slash("bondage", "Get a roped up maid!") {
+        execute {
+            sendMaid(MaidType.BONDAGE)
+        }
+    }
 }
 
 private suspend fun GuildSlashCommandEvent<NoArgs>.sendMaid(maidType: MaidType) {
