@@ -20,7 +20,7 @@ import me.jakejmattson.discordkt.commands.commands
 fun maidCommands() = commands("Maids") {
     slash("maid", "Get a maid!") {
         execute {
-            sendMaid(MaidType.SAFE_FOR_WORK)
+            sendMaid(MaidType.SAFE_FOR_WORK, checkNsfw = false)
         }
     }
 
@@ -49,7 +49,12 @@ fun maidCommands() = commands("Maids") {
     }
 }
 
-private suspend fun GuildSlashCommandEvent<NoArgs>.sendMaid(maidType: MaidType) {
+private suspend fun GuildSlashCommandEvent<NoArgs>.sendMaid(maidType: MaidType, checkNsfw: Boolean = true) {
+    if (checkNsfw && !isInNsfwChannel()) {
+        respond("Sorry, but you can only use this command in an age-restricted channel.")
+        return
+    }
+
     val maidResponse = MaidService.getMaidImage(maidType)
     val maidCount = MaidService.getMaidCount()
 
@@ -62,6 +67,9 @@ private suspend fun GuildSlashCommandEvent<NoArgs>.sendMaid(maidType: MaidType) 
         makeMaidResponse(maidType, maidResponse, maidCount)
     }
 }
+
+private fun GuildSlashCommandEvent<NoArgs>.isInNsfwChannel() =
+    channel.data.nsfw.orElse(false)
 
 private fun EmbedBuilder.makeMaidResponse(maidType: MaidType, maidResponse: MaidResponse, maidCount: MaidCount) {
     title = "Maid Bot"
