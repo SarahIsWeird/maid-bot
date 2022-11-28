@@ -10,4 +10,5 @@ data class MaidCount(
     val swimsuit: Int,
     val nsfw: Int,
     val bondage: Int,
+    val tentacle: Int,
 )

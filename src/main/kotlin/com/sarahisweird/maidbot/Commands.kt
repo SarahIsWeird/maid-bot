@@ -47,6 +47,12 @@ fun maidCommands() = commands("Maids") {
             sendMaid(MaidType.BONDAGE)
         }
     }
+
+    slash("tentacle", "Get a maid enjoying tentacles!") {
+        execute {
+            sendMaid(MaidType.TENTACLE)
+        }
+    }
 }
 
 private suspend fun GuildSlashCommandEvent<NoArgs>.sendMaid(maidType: MaidType, checkNsfw: Boolean = true) {

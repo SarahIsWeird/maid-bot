@@ -10,10 +10,11 @@ version = "1.4-SNAPSHOT"
 
 repositories {
     mavenCentral()
+    maven("https://oss.sonatype.org/content/repositories/snapshots/")
 }
 
 dependencies {
-    implementation("me.jakejmattson:DiscordKt:0.23.4")
+    implementation("me.jakejmattson:DiscordKt:0.23.5-SNAPSHOT")
 
     testImplementation(kotlin("test"))
 }
